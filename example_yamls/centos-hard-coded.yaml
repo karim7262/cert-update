@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: centos
+  labels:
+    app: centos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: centos
+  template:
+    metadata:
+      labels:
+        app: centos
+    spec:
+      containers:
+      - name: centos
+        image: centos:latest
+        command: ["sleep"]
+        args: ["243142354554"]
+        volumeMounts:
+        - name: site-certs
+          mountPath: /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+          subPath: ca-certificates.crt
+        - name: site-certs
+          mountPath: /etc/ssl/certs/ca-certificates.crt
+          subPath: ca-certificates.crt
+        - name: site-certs
+          mountPath: /etc/ssl/certs/java/cacerts
+          subPath: cacerts
+        - name: site-certs
+          mountPath: /etc/pki/java/cacerts
+          subPath: cacerts
+        - name: site-certs
+          mountPath: /opt/java/openjdk/lib/security/cacerts
+          subPath: cacerts
+        - name: site-certs
+          mountPath: /site-certs
+      volumes:
+        - name: site-certs
+          configMap:
+             name: site-certs
+
